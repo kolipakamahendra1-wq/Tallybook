@@ -1,0 +1,71 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, monospace;
+  --color-canvas: #f7f7f5;
+  --color-ink: #18181b;
+  --color-steel: #71717a;
+  --color-line: #e4e4e7;
+  --color-accent: #059669;
+  --color-accent-soft: #d1fae5;
+  --color-sell: #be123c;
+}
+
+body {
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+.rise { animation: rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) both; animation-delay: calc(var(--i, 0) * 80ms); }
+
+@keyframes shimmer {
+  from { background-position: -200% 0; }
+  to { background-position: 200% 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, #ececea 25%, #f6f6f4 50%, #ececea 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s linear infinite;
+  border-radius: 0.375rem;
+}
+
+/* Hero pipeline: each agent row lights up in turn, then the verdict lands. Transform/opacity only. */
+@keyframes lit {
+  0%, 8% { opacity: 0.35; }
+  14%, 70% { opacity: 1; }
+  100% { opacity: 0.35; }
+}
+@keyframes fill {
+  0%, 8% { transform: scaleX(0); }
+  20%, 70% { transform: scaleX(1); }
+  100% { transform: scaleX(0); }
+}
+@keyframes verdict {
+  0%, 52% { opacity: 0; transform: translateY(6px); }
+  60%, 88% { opacity: 1; transform: none; }
+  100% { opacity: 0; transform: translateY(6px); }
+}
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.6); opacity: 0.45; }
+}
+.lit { animation: lit 9s ease-in-out infinite; animation-delay: calc(var(--i, 0) * 1.1s); }
+.fill { transform-origin: left; animation: fill 9s ease-in-out infinite; animation-delay: calc(var(--i, 0) * 1.1s); }
+.verdict { animation: verdict 9s ease-in-out infinite; }
+.pulse-dot { animation: pulse-dot 2s ease-in-out infinite; }
+
+.press { transition: transform 0.15s, background-color 0.2s; }
+.press:active { transform: translateY(1px) scale(0.98); }
+
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .rise, .lit, .fill, .verdict, .pulse-dot, .skeleton { animation: none; opacity: 1; transform: none; }
+}
